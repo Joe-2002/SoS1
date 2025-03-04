@@ -62,7 +62,7 @@ If you find this project helpful, please consider citing our paper:
   title={SoS1: O1 and R1-Like Reasoning LLMs are Sum-of-Square Solvers},
   author={Li, Kechen and Zhu, Wenqi and Cartis, Coralia and Ji, Tianbo and Liu, Shiwei},
   howpublished={arXiv preprint arXiv:2502.20545 [cs.LG]},
-  year={2024}
+  year={2025}
 }
 ```
 
