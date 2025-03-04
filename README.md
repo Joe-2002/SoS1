@@ -1,6 +1,6 @@
 <div align="center">
 
-# SoS1
+# SoS1: O1 and R1-Like Reasoning LLMs are Sum-of-Square Solvers
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![arXiv](https://img.shields.io/badge/arXiv-2502.20545-b31b1b.svg)](https://arxiv.org/abs/2502.20545) [![HuggingFace](https://img.shields.io/badge/🤗%20Hugging%20Face-Paper-yellow.svg)](https://huggingface.co/papers/2502.20545)
 
