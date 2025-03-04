@@ -34,36 +34,17 @@ Large Language Models (LLMs) have achieved human-level proficiency across divers
 
 ### Installation
 
-You can install the latest version via:
 
-```bash
-pip install sos1
-```
 
 ### Install from Source
 
-```bash
-# Clone the repository
-git clone https://github.com/your-username/SoS1.git
-cd SoS1
 
-# Create and activate virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# or
-.venv\Scripts\activate  # Windows
-
-# Install package
-pip install -e .
-```
 
 ## Evaluation
 
 ### Usage
 
-```bash
-sos1 evaluate --model your-model-name --task your-task
-```
+
 
 ### Supported Tasks
 
