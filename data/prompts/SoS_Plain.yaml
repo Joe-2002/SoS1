@@ -1,0 +1,6 @@
+name: "Simple SOS Check"
+description: "Basic polynomial verification"
+prompt: |
+  Please analyze if this polynomial can be expressed as a Sum of Squares (SOS):
+  <INPUT>
+  For the conclusion, use boxed{1} if it is SOS, or boxed{0} if it is not SOS.

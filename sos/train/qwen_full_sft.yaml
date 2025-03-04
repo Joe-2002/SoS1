@@ -1,0 +1,40 @@
+### model
+model_name_or_path: "Qwen2.5-14B-Instruct-1M"
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+deepspeed: examples/deepspeed/ds_z2_offload_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
+
+### dataset
+dataset: SoS_1K
+template: qwen
+cutoff_len: 16384
+max_samples: 1500
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### output
+output_dir: "/qwen2.5-14b/full/sft"
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 2.0e-5
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
+## eval
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 500

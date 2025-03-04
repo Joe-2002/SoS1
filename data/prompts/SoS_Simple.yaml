@@ -1,0 +1,21 @@
+name: "Detailed SOS Analysis"
+description: "Comprehensive polynomial analysis"
+prompt: |
+  Please analyze if this polynomial can be expressed as a Sum of Squares (SOS):
+  <INPUT>
+
+  Consider these aspects in your analysis:
+
+  1. Examine if the highest degree is odd or even
+  2. For even highest degree d, examine the coefficients of highest-degree terms
+  3. Consider these special properties:
+     - Properties of quadratic polynomials
+     - Properties of quartic polynomials in 1-2 variables
+     - Properties of quartic homogeneous polynomials in 1-3 variables
+     - Properties of even-degree univariate polynomials
+  4. Check for any negative values
+  5. Try direct sum of squares representation
+  6. Consider matrix methods if needed
+
+
+  For the conclusion, use boxed{1} if it is SOS, or boxed{0} if it is not SOS.
