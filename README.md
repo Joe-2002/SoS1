@@ -34,24 +34,59 @@ Large Language Models (LLMs) have achieved human-level proficiency across divers
 
 ### Installation
 
+First, create and activate a Conda environment:
 
+```bash
+conda create --name sos python=3.10
+conda activate sos
+```
 
 ### Install from Source
 
+To install the required Python packages, use the `requirements.txt` file. Run the following command in the root directory of your project:
 
+```bash
+pip install -r requirements.txt
+```
 
 ## Evaluation
 
+### Configuration
+
+Before running the evaluation, ensure that you have configured the necessary settings in the code:
+
+1. **API Key Configuration:**
+   - Open the `sos/evals/sos_api_caller.py` file.
+   - Configure your API keys for the models you intend to use. This includes setting the keys for `deepseek_key`, `siliconflow_key`, `qwen_key`, `chatgpt_key`, and `volc_key` as needed.
+
+2. **Model and Channel Selection:**
+   - Open the `sos/evals/experiment_controller.py` file.
+   - In the configuration section, specify the models and channels you wish to use for the evaluation. You can adjust the `model_configs` list to include the desired models and their respective channels.
+   - Set the `sample_size` to determine the number of data samples to use for the evaluation. If `sample_size` is set to `None`, all available data will be used.
+
+### Running the Evaluation
+
+Once the configuration is complete, you can start the evaluation by running the `experiment_controller.py` script. This will execute the evaluation process using the specified models and datasets.
+
+```bash
+python sos/evals/experiment_controller.py
+```
+
+This command will initiate the evaluation, and the results will be processed and saved as specified in the script.
+
 ### Usage
 
+The evaluation datasets are located in the `/data` directory. We provide two main datasets for evaluation:
 
+1. **SoS Dataset (Length ~4k):** This dataset is designed for evaluating the performance of models on polynomial non-negativity determination tasks. It contains polynomials with a length of approximately 4,000 tokens.
 
-### Supported Tasks
+2. **Comparison Dataset:** This dataset is used for comparing the performance of our models with traditional solvers. It includes a variety of polynomial instances that are also used in the benchmarks presented in our paper.
 
-* Polynomial Non-negativity Determination
-* Global Polynomial Optimization
-* Mathematical Reasoning Tasks
-* Expert-designed Reasoning Instruction Evaluation
+## Training
+
+The training scripts are located in the `/sos/train` directory. We utilize [LlamaFactory](https://github.com/hiyouga/LLaMA-Factory/) for training our models. The provided scripts allow you to replicate the training process used to fine-tune our SoS-7B model on the SoS-1K dataset.
+
+To train the model, navigate to the `/sos/train` directory and follow the instructions in the training scripts. Ensure that your environment is set up with the necessary dependencies as outlined in the installation section.
 
 ## Citation
 

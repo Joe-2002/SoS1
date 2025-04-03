@@ -10,7 +10,6 @@ from datetime import datetime
 import re
 import matplotlib.pyplot as plt
 import seaborn as sns
-from plot_style import setup_plot_style
 import logging
 import socket
 import requests
@@ -23,10 +22,6 @@ import sys
 import multiprocessing as mp
 from multiprocessing import Process, Queue, Manager, Pool
 from concurrent.futures import ProcessPoolExecutor
-
-# Set global plot style
-setup_plot_style()
-
 
 class ProgressBar:
     def __init__(self, total: int, prefix: str = '', length: int = 50):
@@ -217,10 +212,10 @@ class APIConfig:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         # API key configuration
-        self.deepseek_key = ""
+        self.deepseek_key = "sk-"
         self.siliconflow_key = ""
-        self.qwen_key = ""
-        self.chatgpt_key = ""
+        self.qwen_key = "sk-"
+        self.chatgpt_key = "sk-"
         self.volc_key = ""  # Volcano Engine API key
 
         # Experiment configuration
@@ -265,7 +260,11 @@ class APIConfig:
                     'deepseek-r1-distill-llama-70b',
                     'deepseek-r1-distill-llama-8b',
                     'deepseek-v3',
-                    'deepseek-r1'
+                    'deepseek-r1',
+                ],
+                'qwen': [
+                    'qwen2.5-7b-instruct-1m',
+                    'qwen2.5-14b-instruct-1m',
                 ]
             },
             'siliconflow': {
@@ -343,10 +342,10 @@ class APIConfig:
 
             # Configure shorter timeout
             timeout = httpx.Timeout(
-                timeout=360.0,    # Total timeout
-                connect=360.0,     # Connection timeout
-                read=360.0,       # Read timeout
-                write=360.0        # Write timeout
+                timeout=120.0,    # Total timeout
+                connect=120.0,     # Connection timeout
+                read=120.0,       # Read timeout
+                write=120.0        # Write timeout
             )
 
             # Configure httpx client
@@ -443,7 +442,7 @@ class APIConfig:
                 max_tokens = self.model_max_tokens.get(base_model_name, 4096)
 
                 # Bailian channel (using Alibaba Cloud API)
-                if channel == 'bailian' and base_model_name in self.model_groups['bailian']['deepseek']:
+                if channel == 'bailian':
                     print(f"\nTrying via Bailian API - Model: {base_model_name}")
                     params = {
                         "model": base_model_name,
@@ -457,8 +456,16 @@ class APIConfig:
                     time.sleep(3)  # Base waiting time
 
                     try:
-                        response = self.qwen_client.chat.completions.create(
-                            **params)
+                        if base_model_name in self.model_groups['bailian']['deepseek']:
+                            response = self.qwen_client.chat.completions.create(
+                                **params)
+                            
+                        elif base_model_name in self.model_groups['bailian']['qwen']:
+                            response = self.qwen_client.chat.completions.create(
+                                **params)
+                        else:
+                            raise ValueError("Model Name Error")
+                            
                         if response and hasattr(response, 'choices') and response.choices:
                             result = response.choices[0].message.content.strip(
                             )
@@ -547,6 +554,7 @@ class APIConfig:
                 last_error = str(e)
                 if "timeout" in str(e).lower() or "Model service timeout" in str(e):
                     time.sleep(10)  # Wait 10 seconds for timeout errors
+                print(f"Error during API call: {last_error}")
                 return None
 
             return None
@@ -560,9 +568,8 @@ class APIConfig:
                 result = try_api_call(channel)
                 if result is not None:
                     return result
-                print(
-                    f"\n{channel} channel call failed (retry {retry + 1}/{max_retries}): {last_error}")
-                    time.sleep(3)  # Wait 3 seconds before each retry
+                print(f"\n{channel} channel call failed (retry {retry + 1}/{max_retries}): {last_error}")
+                time.sleep(3)  # Wait 3 seconds before each retry
 
         # Return error after all channels fail
         return None, f"All API channels failed, last error: {last_error}", None

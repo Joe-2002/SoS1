@@ -18,6 +18,7 @@ from datetime import datetime
 from typing import Optional
 import pandas as pd
 from prompt_loader import PromptLoader
+import time
 
 # Set import path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -171,17 +172,20 @@ def main():
     config = {
         # Data configuration
         'input_file': os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'data',
-            'evaluation.jsonl'
+            os.path.dirname(os.path.abspath(__file__)),  # 当前文件所在目录
+            '..',  # 上一级目录
+            '..',  # 上一级目录
+            'data',  # data 目录
+            'evaluation',  # evaluation 目录
+            'contraset.jsonl'  # 目标文件
         ),
         'sample_size': None,  # Set the number of samples to process, None means use all data
 
         # Model configuration
         'model_configs': [
             # DeepSeek Models (Bailian API call)
-            {'name': 'deepseek-r1-distill-qwen-1.5b', 'temperature': None,
-                'try_channels': ['bailian']},
+            # {'name': 'deepseek-r1-distill-qwen-1.5b', 'temperature': None,
+            #     'try_channels': ['bailian']},
             # {'name': 'deepseek-r1-distill-qwen-7b', 'temperature': None,
             #     'try_channels': ['bailian']},
             # {'name': 'deepseek-r1-distill-qwen-14b', 'temperature': None,
@@ -190,14 +194,21 @@ def main():
             #     'try_channels': ['bailian']},
             # {'name': 'deepseek-r1-distill-llama-70b', 'temperature': None,
             #     'try_channels': ['bailian']},
-            {'name': 'deepseek-r1-distill-llama-8b', 'temperature': None,
-                'try_channels': ['bailian']},
-            # {'name': 'deepseek-r1', 'temperature': None,
+            # {'name': 'deepseek-r1-distill-llama-8b', 'temperature': None,
             #     'try_channels': ['bailian']},
+            {'name': 'qwen2.5-7b-instruct-1m', 'temperature': 0.1,'try_channels': ['bailian']},
+            # {'name': 'deepseek-r1', 'temperature': None, 'try_channels': ['bailian']},
+            # {'name': 'deepseek-v3', 'temperature': 0.1, 'try_channels': ['bailian']},
+            # {'name': 'o1-mini', 'temperature': None,},
+            # {'name': 'gpt-4o', 'temperature': 0.1,
+            #     'try_channels': ['chatgpt']},
+            # {'name': 'o3-mini', 'temperature': None,
+            #     'try_channels': ['chatgpt']},
         ],
 
         # Prompt configuration
-        'prompt_keys': ['SoS_Plain', 'SoS_Simple', 'SoS_Reasoning'],  # Use prompt templates from data/prompts directory
+        'prompt_keys': ['SoS_Plain'],
+        # 'prompt_keys': ['SoS_Plain', 'SoS_Simple', 'SoS_Reasoning'],  # Use prompt templates from data/prompts directory
         # Experiment configuration
         'rounds': 1,  # Number of test rounds per sample
         'analysis_dir_prefix': 'Analysis_'  # Prefix for analysis results directory
@@ -206,6 +217,11 @@ def main():
     # Create controller instance
     controller = ExperimentController()
     controller.config = config  # Use quick configuration
+    
+    # Set the correct path for prompts
+    controller.prompt_loader = PromptLoader(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'data', 'prompts')
+    )
 
     try:
         # Run experiment

@@ -4,11 +4,7 @@ import seaborn as sns
 import os
 from datetime import datetime
 import glob
-from plot_style import setup_plot_style
 import numpy as np
-
-# Set global plot style
-setup_plot_style()
 
 
 def create_performance_chart(df: pd.DataFrame, model_name: str, output_dir: str):
